@@ -1,0 +1,240 @@
+<center><h2 style="color:red;"><u>PROFILE PAGE</u></h2>
+<div class="heading">
+<b>NAME:</b><%= currUser.name %>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>EMAIL:</b><%= currUser.email %>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<form action='/' style="text-align:right">
+<input type='submit' value="HOME PAGE">
+</form>
+</div>
+
+<br/>
+
+<div class="count">
+	<center>TWEETS :
+	<%= myTweets.count %></center><br/><br/>
+	<center>FOLLOWING : 
+	<%= following.count %></center><br/><br/>
+	<center>FOLLOWERS :
+	<%= followers.count %></center>
+</div>
+</center>
+<br/><br/>
+
+
+<% if isFollow %>
+	<center>
+	<form action="/unfollow" method="POST">
+	<input type="hidden" name="secondUser" value="<%= currUser.userId%>">
+	<input type="submit" value="UNFOLLOW">
+	</form>
+	</center>
+	<br/><br/>
+
+
+<div class="alltweets">
+<div class="headings">
+MY TWEETS</div>
+<br/>
+<% myTweets.each do |tweetObject|%>
+	<div class="completetweet">
+	<% currUser = User.get(tweetObject.userId) %>
+	<% currTweetId = tweetObject.tweetId %>
+	<div class="name">
+	<a href="/profile/<%= currUser.userId %>"> 
+	<b><%= currUser.name %></b></a>
+	</div>
+	<div class="content"><%= tweetObject.content %></div>
+	<div class="like">
+	<a href="/listoflikes/<%= tweetObject.tweetId %> ">
+	LIKES:<%=tweetObject.likes%></a>
+	<!--<a href="/listofdislikes/<%= tweetObject.tweetId %> ">
+	<br/>DISLIKES:
+	<%= tweetObject.dislikes %>
+	</a><br/> -->
+
+	<% likeOnCurrTask = Like.all(:tweetId => currTweetId) %>
+	<% likeByCurrUser = likeOnCurrTask.all(:userId => session[:userid]).first %>
+	<% if likeByCurrUser %>
+	<a href="/disliketweet/<%= tweetObject.tweetId %> ">
+		<img src="https://pbs.twimg.com/media/CO-EECIUkAALqqu.jpg" style="height:20px;width:20px;">
+	</a>
+	<% else %>
+	<a href="/liketweet/<%= tweetObject.tweetId %> ">
+		<img src="http://2.bp.blogspot.com/-CZ6preo9Hfc/Vjk6aMS2GmI/AAAAAAAABO0/7WJa54trZCI/s1600/heart.png" style="height:20px;width:20px;">	
+	</a>
+	<% end %>
+	</div>
+	<br/>
+
+	<div class="comment">
+		<b><u>COMMENTS</u></b>
+		<% allComments = Comment.all(:tweetId => currTweetId)%>
+		<% allComments.each do |commentObject| %>
+			<br/>
+			<% currCommentUser = User.get(commentObject.userId)%>
+			<b><%= currCommentUser.name %>:</b>
+			<%= commentObject.content %>
+		<% end %>
+
+		<form action='/addcomment' method='POST'>
+		<input type="text" name="commentContent" placeholder="Enter Your Comment Here" style="width:250px;height:15px;">
+		<input type="hidden" name="tweetId" value="<%= currTweetId %>">
+		<input type="submit" value="COMMENT">
+		</form>
+	</div><br/>
+	
+	</div>
+	<br/><br/>
+<% end %>
+</div>
+<br/><br/>
+
+<center>
+<div class="followed">
+<div class="headings">FOLLOWERS</div><br/>
+<div class="all">
+<% followers.each do |personObject|%>
+	<% person=User.all(:userId => personObject.followedBy).first %>
+	<a href="/profile/+ <% person.userId %>">
+		<%= person.name %>
+	</a>
+	<br/>
+<% end %>
+</div>
+<br/><br/>
+</div>
+<br/><br/>
+<div class="followers">
+<div class="headings">FOLLOWING</div><br/>
+<div class="all">
+<% following.each do |personObject|%>
+	<% person=User.all(:userId => personObject.followedTo).first %>
+	<a href="/profile/+ <% person.userId %>">
+		<%= person.name %>
+	</a>
+	<br/>
+<% end %>
+</div>
+<br/><br/>
+</div>
+</center>
+<br/><br/>
+
+
+
+<% else %>
+	<center>
+	<form action="/follow" method="POST">
+	<input type="hidden" name="secondUser" value="<%= currUser.userId%>">
+	<input type="submit" value="FOLLOW">
+	</form>
+	<br/><br/>
+	</center>
+<% end %>
+
+
+
+
+
+<style>
+	.taggedtweets
+	{
+		background-color:#99D4E8;
+		padding:10px;
+	}
+	.alltweets
+	{
+		background-color:#99D4E8;
+		padding:10px;
+	}
+	.followed
+	{
+		background-color:#99D4E8;
+		padding:10px;	
+	}
+	.followers
+	{
+		background-color:#99D4E8;
+		padding:10px;		
+	}
+	.headings
+	{
+		text-align: center;
+		color:#031E96;
+		font-size:20px;
+	}
+	.completetweet
+	{
+		background-color:#F78E52;
+		height:250px;
+		border-radius:15px;
+ 		box-shadow: 10px 10px 5px #888888;		
+ 		padding:10px;
+	}
+	.name
+	{
+		font-weight:bold;
+		font-size:18px;
+	}
+	.content
+	{
+		background-color:#FFD197;
+		height:40px;
+		padding:5px;
+	}
+	.like
+	{
+		font-family: "Courier New", Courier, monospace;
+		font-size:20px;
+	}
+	.comment
+	{
+
+	}
+	.container
+	{
+		margin:auto;
+		height:200px;
+	}
+	.welcome
+	{
+		text-color:red;
+		font-weight:bold;
+		font-size:20px;
+	}
+	.posttweet
+	{
+		width:800px;
+		margin-left:250px;
+		display:inline;
+		height:200px;
+	}
+	.heading
+	{
+		font-size:25px;
+	}
+
+	.count
+	{
+		color:blue;
+		background-color:#99D4E8;
+		padding:50px;
+		width:250px;
+		border-radius:30px;
+		height:130px;
+	}
+	.all
+	{
+		border-radius: 25px;
+		width:550px;
+		line-height: 20px;
+		height:200px;
+		background-color:#F78E52;
+		box-shadow: 10px 10px 5px #888888;
+	}
+</style>
+
+

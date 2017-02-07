@@ -1,0 +1,163 @@
+<center>
+<br/><br/><br/>
+<div class="all">
+<br/>
+<h2 style="color:red;"><u>SIGN IN</u></h2>
+<br/>
+<form action='/signin' method='POST'>
+
+<label>UserName/Email</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="text" name="nameOrEmail"><br/><br/>
+<label>Password</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;
+<input type="password" name="password"><br/><br/>
+<input type="submit" value="SIGN IN"><br/><br/>
+<a href='/signup'>NEW USER ??</a>
+</form>
+
+<br/><br/><br/><br/><br/><br/>
+</div>
+</center>
+<br/><br/><br/>
+
+<center>
+<form action='/searchperson' method='POST'>
+<input type="text" name="personName" placeholder="SEARCH FRIEND'S HERE" style="width:200px;height:15px;">
+<input type="submit" value="SEARCH">
+</form>
+</center>
+
+
+
+
+<br/><br/><br/>
+<div class="alltweets">
+<div class="headings">
+ALL TWEETS</div>
+<br/>
+<% allTweets.each do |tweetObject|%>
+	<div class="completetweet">
+	<% currUser = User.get(tweetObject.userId) %>
+	<% currTweetId = tweetObject.tweetId %>
+	<div class="name">
+	<a href="/profile/<%= currUser.userId %>"> 
+	<b><%= currUser.name %></b></a>
+	</div>
+	<div class="content"><%= tweetObject.content %></div>
+	<div class="like">
+	<a href="/listoflikes/<%= tweetObject.tweetId %> ">
+	LIKES:<%=tweetObject.likes%></a>
+	<!--<a href="/listofdislikes/<%= tweetObject.tweetId %> ">
+	<br/>DISLIKES:
+	<%= tweetObject.dislikes %>
+	</a><br/> -->
+
+	</div>
+	<br/>
+
+	<div class="comment">
+		<b><u>COMMENTS</u></b>
+		<% allComments = Comment.all(:tweetId => currTweetId)%>
+		<% allComments.each do |commentObject| %>
+			<br/>
+			<% currCommentUser = User.get(commentObject.userId)%>
+				<b><%= currCommentUser.name %>:</b>
+			<%= commentObject.content %>
+		<% end %>
+	</div>
+
+	</div>
+	<br/><br/>
+<% end %>
+</div>
+
+<br/><br/><br/><br/>
+
+<style>
+	.all
+	{
+		box-shadow: 10px 10px 5px #888888;
+		border-radius: 25px;
+		width:550px;
+		line-height: 20px;
+		height:300px;
+		background-color:#F5DADA;
+	}
+	.taggedtweets
+	{
+		background-color:#99D4E8;
+		padding:10px;
+	}
+	.alltweets
+	{
+		background-color:#99D4E8;
+		padding:10px;
+	}
+	.followedtweets
+	{
+		background-color:#99D4E8;
+		padding:10px;	
+	}
+	.headings
+	{
+		text-align: center;
+		color:#031E96;
+		font-size:20px;
+	}
+	.completetweet
+	{
+		background-color:#F78E52;
+		height:250px;
+		border-radius:15px;
+ 		box-shadow: 10px 10px 5px #888888;		
+ 		padding:10px;
+	}
+	.name
+	{
+		font-weight:bold;
+		font-size:18px;
+	}
+	.content
+	{
+		background-color:#FFD197;
+		height:40px;
+		padding:5px;
+	}
+	.like
+	{
+		font-family: "Courier New", Courier, monospace;
+		font-size:20px;
+	}
+	.comment
+	{
+
+	}
+	.container
+	{
+		margin:auto;
+		height:200px;
+	}
+	.count
+	{
+		color:blue;
+		background-color:#99D4E8;
+		padding:50px;
+		width:250px;
+		border-radius:30px;
+		float:left;
+		height:200px;
+	}
+	.welcome
+	{
+		text-color:red;
+		font-weight:bold;
+		font-size:20px;
+	}
+	.posttweet
+	{
+		width:800px;
+		margin-left:250px;
+		display:inline;
+		height:200px;
+	}
+</style>

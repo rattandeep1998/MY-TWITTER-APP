@@ -1,0 +1,27 @@
+<br/><br/><br/><br/><br/>
+<center>
+<div class="all">
+
+<br/>
+<h2 style="color:red;"><u>EDIT TWEET</u></h2>
+
+<form action='/edittweet' method='POST' class='form'>
+<input type="text" name="newContent" value="<%= currTweet.content %>" style="width:500px;height:35px;"><br/><br/>
+<input type="hidden" name="tweetId" value="<%= currTweet.userId %>">
+<input type="submit" value="DONE">
+</form>
+
+</div>
+<br/><br/><br/><br/><br/>
+</center>
+
+<style>
+	.all
+	{
+		border-radius: 25px;
+		width:550px;
+		line-height: 20px;
+		height:200px;
+		background-color:#F5DADA;
+	}
+</style>

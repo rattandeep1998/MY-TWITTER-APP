@@ -1,0 +1,36 @@
+
+<form action='/' style="text-align:right">
+<input type='submit' value="HOME PAGE" >
+</form>
+<br/>
+
+<center>
+
+<div class="all">
+<br/>
+<h2 style="color:red;"><u>LIST OF LIKERS</u></h2>
+
+<% listOfLikes.each do |likeObject| %>
+	
+	<a href="/profile/<%= likeObject.userId %>"> 
+	<%= User.get(likeObject.userId).name %>
+	</a>
+	<br/>
+<% end %>
+
+</div>
+<br/>
+
+</center>
+
+
+<style>
+	.all
+	{
+		border-radius: 25px;
+		width:550px;
+		line-height: 20px;
+		height:400px;
+		background-color:#F5DADA;
+	}
+</style>
